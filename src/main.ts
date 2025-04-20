@@ -6,7 +6,7 @@ import * as process from "node:process";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const frontendUrlCors = process.env.FRONTEND_URL_CORS
+  const frontendUrlCors = process.env.FRONTEND_URL_CORS || '*';
   app.enableCors({
     origin: frontendUrlCors, // URL do frontend
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
