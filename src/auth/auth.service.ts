@@ -45,7 +45,7 @@ export class AuthService {
     password: string;
     name: string;
     role: "ONG" | "VOLUNTEER";
-    confirmPassword?: string; // opcional agora
+    confirmPassword?: string;
   }) {
     const existingUser = await this.prisma.user.findUnique({
       where: { email: data.email },
@@ -88,15 +88,15 @@ export class AuthService {
       data: { resetPasswordToken: token },
     });
 
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+    const resetLink = `${process.env.FRONTEND_URL_CORS}/reset-password/${token}`;
 
     await this.mailService.sendMail({
       to: email,
       subject: "Recuperação de Senha",
       html: `
         <h1>Recuperação de Senha</h1>
-        <p>Você solicitou a recuperação de senha. Clique no link abaixo para redefinir sua senha:</p>
-        <a href="${resetLink}">Redefinir Senha</a>
+        <p>Você solicitou a recuperação de senha da sua conta ONG Connect. Clique no link abaixo para redefinir sua senha:</p>
+        <p>Clique <a href="${resetLink}"><strong>aqui</strong></a> para redefinir sua senha</p>
         <p>Este link é válido por 1 hora.</p>
         <p>Se você não solicitou esta recuperação, ignore este email.</p>
       `,
