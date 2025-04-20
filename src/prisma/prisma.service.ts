@@ -1,5 +1,5 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from "@nestjs/common";
-import { PrismaClient } from "@prisma/client";
+import {Injectable, OnModuleDestroy, OnModuleInit} from "@nestjs/common";
+import {PrismaClient} from "@prisma/client";
 import * as bcrypt from "bcrypt";
 
 @Injectable()
@@ -24,13 +24,23 @@ export class PrismaService
     const userCount = await this.user.count();
     if (userCount > 0) return;
 
-    const hashedPassword = await bcrypt.hash("password123", 10);
+    const hashedPassword = await bcrypt.hash("123", 10);
 
-    const user = await this.user.create({
+    const ongUser = await this.user.create({
       data: {
-        email: "john@example.com",
+        email: "john@ong.example.com",
         name: "John Doe",
         password: hashedPassword,
+        role: "ONG",
+      },
+    });
+
+    const volunteerUser = await this.user.create({
+      data: {
+        email: "john@volunteer.example.com",
+        name: "John Doe",
+        password: hashedPassword,
+        role: "VOLUNTEER",
       },
     });
 
@@ -44,7 +54,7 @@ export class PrismaService
         location: "São Paulo, SP",
         date: new Date("2024-03-15"),
         image: "https://placehold.co/300x200",
-        creatorId: user.id,
+        creatorId: ongUser.id,
       },
     });
   }
