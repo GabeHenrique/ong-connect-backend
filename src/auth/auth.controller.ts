@@ -15,12 +15,12 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
-  @Post("auth/login")
+  @Post("api/auth/login")
   login(@Req() req: { user: User }) {
     return this.authService.login(req.user);
   }
 
-  @Post("register")
+  @Post("auth/register")
   async register(
     @Body()
     registerDto: {
@@ -33,18 +33,18 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @Post("auth/signout")
+  @Post("api/auth/signout")
   @HttpCode(200)
   signout() {
     return { message: "Logged out successfully" };
   }
 
-  @Post("forgot-password")
+  @Post("auth/forgot-password")
   async forgotPassword(@Body("email") email: string) {
     return this.authService.forgotPassword(email);
   }
 
-  @Post("reset-password")
+  @Post("auth/reset-password")
   async resetPassword(@Body() data: { token: string; password: string }) {
     return this.authService.resetPassword(data.token, data.password);
   }
