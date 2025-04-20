@@ -15,7 +15,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
-  @Post("api/auth/login")
+  @Post("auth/login")
   login(@Req() req: { user: User }) {
     return this.authService.login(req.user);
   }
@@ -33,7 +33,7 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @Post("api/auth/signout")
+  @Post("auth/signout")
   @HttpCode(200)
   signout() {
     return { message: "Logged out successfully" };
