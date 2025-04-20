@@ -10,12 +10,12 @@ import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { User } from "@prisma/client";
 
-@Controller("/api/auth")
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
-  @Post("login")
+  @Post("auth/login")
   login(@Req() req: { user: User }) {
     return this.authService.login(req.user);
   }
@@ -33,7 +33,7 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @Post("signout")
+  @Post("auth/signout")
   @HttpCode(200)
   signout() {
     return { message: "Logged out successfully" };
