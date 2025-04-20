@@ -5,7 +5,6 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 @Injectable()
 export class S3Service {
@@ -17,12 +16,14 @@ export class S3Service {
     const secretAccessKey = this.configService.get<string>(
       "AWS_SECRET_ACCESS_KEY",
     );
-
+    const endpoint = this.configService.get<string>("AWS_ENDPOINT"); // Add this line to get the endpoint from the .env file
     if (!region || !accessKeyId || !secretAccessKey) {
       throw new Error("AWS credentials not properly configured");
     }
 
     this.s3Client = new S3Client({
+      forcePathStyle: true,
+      endpoint,
       region,
       credentials: {
         accessKeyId,
@@ -46,7 +47,7 @@ export class S3Service {
 
     await this.s3Client.send(command);
 
-    return `https://${bucket}.s3.${this.configService.get("AWS_REGION")}.amazonaws.com/${key}`;
+    return `https://iefmybeqnivniklaxpbo.supabase.co/storage/v1/object/public/ong-connect//${key}`;
   }
 
   async deleteFile(url: string) {
@@ -54,7 +55,7 @@ export class S3Service {
       this.configService.get("AWS_BUCKET_NAME") || "ong-connect";
 
     const key = url.split(
-      `https://${bucket}.s3.${this.configService.get("AWS_REGION")}.amazonaws.com/`,
+      `https://iefmybeqnivniklaxpbo.supabase.co/storage/v1/object/public/ong-connect//`,
     )[1];
 
     const command = new DeleteObjectCommand({
@@ -62,6 +63,10 @@ export class S3Service {
       Key: key,
     });
 
+    try {
     await this.s3Client.send(command);
+    } catch (error) {
+      console.log(error); 
+    }
   }
 }

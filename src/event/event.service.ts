@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { Event, Prisma, VolunteerApplication } from "@prisma/client";
 import { S3Service } from "../s3/s3.service";
-import { volunteerApplication, VolunteerApplicationDto } from "./event.interface";
+import { VolunteerApplicationDto } from "./event.interface";
 
 @Injectable()
 export class EventService {
@@ -402,7 +402,7 @@ export class EventService {
   }
 
   async findVolunteersFromEventId(eventId: number): Promise<VolunteerApplicationDto[]> {
-    const result: VolunteerApplication[] = await this.prisma.volunteerApplication.findMany({
+    const result = await this.prisma.volunteerApplication.findMany({
       where: { eventId },
       include: {
         event: {
